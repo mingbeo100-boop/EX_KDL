@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPulse — Sổ Tay Hướng Dẫn Sử Dụng & Kiến Trúc Hệ Thống</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        @page {
+            size: A4;
+            margin: 15mm 15mm 15mm 15mm;
+            @bottom-right {
+                content: counter(page);
+                font-family: 'Inter', sans-serif;
+                font-size: 9pt;
+                color: #64748B;
+            }
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #1E293B;
+            line-height: 1.6;
+            font-size: 10.5pt;
+            background: #FFFFFF;
+            margin: 0;
+            padding: 0;
+        }
+
+        .cover-page {
+            page-break-after: always;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 20px;
+            text-align: center;
+            border: 2px solid #E2E8F0;
+            border-radius: 8px;
+            background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
+        }
+
+        .cover-header {
+            border-bottom: 2px solid #0284C7;
+            padding-bottom: 20px;
+        }
+        .cover-school {
+            font-size: 13pt;
+            font-weight: 700;
+            color: #0F172A;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+        .cover-faculty {
+            font-size: 11pt;
+            color: #475569;
+            margin: 5px 0 0 0;
+            font-weight: 500;
+        }
+
+        .cover-body {
+            margin: auto 0;
+        }
+        .badge {
+            display: inline-block;
+            background: #E0F2FE;
+            color: #0369A1;
+            padding: 6px 16px;
+            border-radius: 9999px;
+            font-size: 10pt;
+            font-weight: 600;
+            margin-bottom: 25px;
+            border: 1px solid #BAE6FD;
+        }
+        .cover-title {
+            font-size: 28pt;
+            font-weight: 800;
+            color: #0F172A;
+            line-height: 1.25;
+            margin: 0 0 15px 0;
+            letter-spacing: -0.5px;
+        }
+        .cover-subtitle {
+            font-size: 14pt;
+            color: #0284C7;
+            font-weight: 600;
+            margin: 0 0 20px 0;
+        }
+        .cover-desc {
+            font-size: 11pt;
+            color: #64748B;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .cover-footer {
+            border-top: 1px solid #E2E8F0;
+            padding-top: 25px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 9.5pt;
+            color: #475569;
+            text-align: left;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        h1 {
+            font-size: 18pt;
+            font-weight: 700;
+            color: #0F172A;
+            border-bottom: 2px solid #0284C7;
+            padding-bottom: 8px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2 {
+            font-size: 13.5pt;
+            font-weight: 600;
+            color: #1E293B;
+            margin-top: 24px;
+            margin-bottom: 10px;
+            border-left: 4px solid #0284C7;
+            padding-left: 10px;
+        }
+
+        h3 {
+            font-size: 11.5pt;
+            font-weight: 600;
+            color: #334155;
+            margin-top: 18px;
+            margin-bottom: 8px;
+        }
+
+        p {
+            margin: 0 0 12px 0;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin: 0 0 15px 0;
+            padding-left: 22px;
+        }
+        li {
+            margin-bottom: 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0 20px 0;
+            font-size: 9.5pt;
+        }
+        th, td {
+            border: 1px solid #CBD5E1;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #F1F5F9;
+            color: #0F172A;
+            font-weight: 600;
+        }
+        tr:nth-child(even) td {
+            background-color: #F8FAFC;
+        }
+
+        .callout {
+            background: #F0F9FF;
+            border-left: 4px solid #0284C7;
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+            margin: 15px 0;
+            font-size: 10pt;
+        }
+        .callout-title {
+            font-weight: 700;
+            color: #0369A1;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .callout-warning {
+            background: #FEF3C7;
+            border-left-color: #D97706;
+        }
+        .callout-warning .callout-title {
+            color: #B45309;
+        }
+
+        .callout-success {
+            background: #F0FDF4;
+            border-left-color: #16A34A;
+        }
+        .callout-success .callout-title {
+            color: #15803D;
+        }
+
+        .img-container {
+            margin: 18px 0;
+            text-align: center;
+            page-break-inside: avoid;
+        }
+        .img-container img {
+            width: 100%;
+            max-width: 100%;
+            border-radius: 8px;
+            border: 1px solid #CBD5E1;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        .img-caption {
+            font-size: 8.5pt;
+            color: #64748B;
+            font-weight: 500;
+            margin-top: 6px;
+            font-style: italic;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', Consolas, monospace;
+            background: #F1F5F9;
+            color: #0F172A;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-size: 9pt;
+            border: 1px solid #E2E8F0;
+        }
+
+        pre {
+            background: #0F172A;
+            color: #F8FAFC;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', Consolas, monospace;
+            font-size: 8.5pt;
+            line-height: 1.5;
+            overflow-x: auto;
+            margin: 12px 0;
+            page-break-inside: avoid;
+        }
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            border: none;
+        }
+
+        .toc {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 20px 30px;
+            margin: 20px 0;
+        }
+        .toc-title {
+            font-size: 13pt;
+            font-weight: 700;
+            color: #0F172A;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #CBD5E1;
+            padding-bottom: 6px;
+        }
+        .toc-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+        .toc-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px dashed #E2E8F0;
+            font-size: 10pt;
+        }
+        .toc-item a {
+            color: #0369A1;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .toc-item a:hover {
+            text-decoration: underline;
+        }
+
+        .step-box {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: flex-start;
+        }
+        .step-number {
+            background: #0284C7;
+            color: #FFFFFF;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 10pt;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .step-content {
+            flex-grow: 1;
+        }
+
+        .metric-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 8.5pt;
+            font-weight: 600;
+        }
+        .metric-additive { background: #DCFCE7; color: #166534; }
+        .metric-semi { background: #FEF9C3; color: #854D0E; }
+        .metric-non { background: #FEE2E2; color: #991B1B; }
+    </style>
+</head>
+<body>
+
+<!-- TRANG BÌA -->
+<div class="cover-page">
+    <div class="cover-header">
+        <p class="cover-school">ĐỒ ÁN MÔN HỌC KHO DỮ LIỆU & KINH DOANH THÔNG MINH (DATA WAREHOUSE & BI)</p>
+        <p class="cover-faculty">Học Phần Chuyên Ngành Khoa Học Dữ Liệu / Công Nghệ Thông Tin</p>
+    </div>
+
+    <div class="cover-body">
+        <div class="badge">TÀI LIỆU HƯỚNG DẪN KỸ THUẬT & SỬ DỤNG CHÍNH THỨC</div>
+        <h1 class="cover-title">EDUPULSE</h1>
+        <h2 class="cover-subtitle">Student Learning Analytics & Data Warehouse Platform</h2>
+        <p class="cover-desc">
+            Nền tảng phân tích hiệu quả đào tạo và kho dữ liệu học vụ đại học. Tích hợp đầy đủ mô hình dữ liệu chiều Star Schema (Kimball), quản trị biến động SCD Type 2, đường ống ETL kiểm soát chất lượng 7 lớp và hệ thống cảnh báo sớm học tập.
+        </p>
+    </div>
+
+    <div class="cover-footer">
+        <div>
+            <strong>Dự án:</strong> Hệ Thống Phân Tích Dữ Liệu Học Vụ EduPulse<br>
+            <strong>Kiến trúc:</strong> Kimball Dimensional Modeling (Star Schema)<br>
+            <strong>Cơ sở dữ liệu:</strong> SQLite 3 (Data Warehouse & OLTP Source)
+        </div>
+        <div style="text-align: right;">
+            <strong>Phiên bản:</strong> 1.0 (Zero-Config Master Release)<br>
+            <strong>Công nghệ:</strong> Python FastAPI + React Vite + TypeScript<br>
+            <strong>Ngày phát hành:</strong> Tháng 10/2026
+        </div>
+    </div>
+</div>
+
+<!-- MỤC LỤC -->
+<div class="page-break"></div>
+<h1>📑 Mục Lục Tài Liệu</h1>
+<div class="toc">
+    <div class="toc-title">Danh Mục Nội Dung Chi Tiết</div>
+    <ul class="toc-list">
+        <li class="toc-item"><span><strong>Chương 1:</strong> Tổng Quan Hệ Thống & Hướng Dẫn Khởi Chạy (Quick Start)</span> <span>Trang 3</span></li>
+        <li class="toc-item"><span><strong>Chương 2:</strong> Kiến Trúc Hoạt Động & Mô Hình Kho Dữ Liệu (How It Works)</span> <span>Trang 5</span></li>
+        <li class="toc-item"><span><strong>Chương 3:</strong> Quy Trình ETL & Kiểm Soát Chất Lượng Dữ Liệu</span> <span>Trang 8</span></li>
+        <li class="toc-item"><span><strong>Chương 4:</strong> Hướng Dẫn Sử Dụng Chi Tiết Từng Phân Hệ Giao Diện</span> <span>Trang 10</span></li>
+        <li class="toc-item" style="padding-left: 20px;"><span>4.1 Bảng Điều Khiển Tổng Quan (Overview Dashboard)</span> <span>Trang 10</span></li>
+        <li class="toc-item" style="padding-left: 20px;"><span>4.2 Phân Tích Kết Quả Học Tập & Điểm Thi (Performance Analysis)</span> <span>Trang 12</span></li>
+        <li class="toc-item" style="padding-left: 20px;"><span>4.3 Hệ Thống Cảnh Báo Sớm & Can Thiệp Học Tập (Early Warning)</span> <span>Trang 13</span></li>
+        <li class="toc-item" style="padding-left: 20px;"><span>4.4 Hiệu Quả Giảng Dạy & Phân Tích Môn Học (Courses)</span> <span>Trang 14</span></li>
+        <li class="toc-item" style="padding-left: 20px;"><span>4.5 Phân Tích & Kiểm Tra Tệp Dữ Liệu Độc Lập (File Analysis)</span> <span>Trang 15</span></li>
+        <li class="toc-item" style="padding-left: 20px;"><span>4.6 Giám Sát Pipeline ETL & Kiểm Toán Dữ Liệu (ETL Pipeline)</span> <span>Trang 16</span></li>
+        <li class="toc-item" style="padding-left: 20px;"><span>4.7 Tra Cứu Từ Điển Dữ Liệu Học Vụ (Data Dictionary)</span> <span>Trang 17</span></li>
+        <li class="toc-item"><span><strong>Chương 5:</strong> Câu Hỏi Thường Gặp & Xử Lý Sự Cố (Troubleshooting)</span> <span>Trang 18</span></li>
+    </ul>
+</div>
+
+<div class="callout">
+    <div class="callout-title">💡 Mục Tiêu Tài Liệu</div>
+    Tài liệu này được biên soạn dành cho Thầy Cô chấm thi, Giảng viên bộ môn, Cố vấn học tập và Sinh viên thực hiện đồ án. Cung cấp đầy đủ hướng dẫn thực thi, sơ đồ phân tích kỹ thuật, hình ảnh giao diện thực tế và cơ sở lý thuyết chuẩn hóa theo môn Kho Dữ Liệu.
+</div>
+
+<!-- CHƯƠNG 1 -->
+<div class="page-break"></div>
+<h1>Chương 1: Tổng Quan Hệ Thống & Hướng Dẫn Khởi Chạy</h1>
+
+<h2>1.1 Giới thiệu Đề tài EduPulse</h2>
+<p>
+    <strong>EduPulse</strong> là nền tảng Phân tích Hiệu quả Đào tạo và Kho Dữ Liệu Học Vụ (Student Learning Analytics & Data Warehouse) phục vụ đồ án môn <strong>Kho Dữ Liệu (Data Warehouse & BI)</strong>. Khác biệt hoàn toàn với các phần mềm quản lý sinh viên CRUD thông thường, EduPulse được thiết kế tập trung vào:
+</p>
+<ul>
+    <li><strong>Phân tích dữ liệu lịch sử đa chiều (OLAP):</strong> Cung cấp khả năng xoay chiều dữ liệu (Slice, Dice, Drill-down, Roll-up) theo Thời gian (Học kỳ, Năm học), Tổ chức (Khoa, Ngành), Môn học và Khóa tuyển sinh.</li>
+    <li><strong>Đảm bảo tính đúng đắn toán học (Aggregate Accuracy):</strong> Tuyệt đối không tính trung bình cộng của các tỷ lệ phần trăm (No average-of-averages); áp dụng chính xác công thức GPA trọng số tín chỉ.</li>
+    <li><strong>Quản lý biến động lịch sử (SCD Type 2):</strong> Theo dõi toàn vẹn lịch sử chuyển ngành và trạng thái sinh viên mà không làm sai lệch kết quả học tập trong quá khứ.</li>
+    <li><strong>Quy trình ETL đạt chuẩn doanh nghiệp:</strong> Kiểm soát dữ liệu 7 tầng, loại bỏ dữ liệu bẩn có ghi nhật ký lý do từ chối (Rejection Log) và nạp dữ liệu lặp an toàn (Idempotency).</li>
+</ul>
+
+<h2>1.2 Yêu Cầu Hệ Thống Tối Thiểu</h2>
+<p>Hệ thống có thể chạy trên mọi máy tính cá nhân sử dụng hệ điều hành Windows, macOS hoặc Linux:</p>
+<table>
+    <thead>
+        <tr>
+            <th>Thành phần</th>
+            <th>Yêu cầu tối thiểu</th>
+            <th>Khuyến nghị</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Hệ điều hành</strong></td>
+            <td>Windows 10/11, macOS 12+, Ubuntu 20.04+</td>
+            <td>Windows 11 (64-bit)</td>
+        </tr>
+        <tr>
+            <td><strong>Môi trường Python</strong></td>
+            <td>Python 3.9 (đã tích hợp vào PATH)</td>
+            <td>Python 3.11</td>
+        </tr>
+        <tr>
+            <td><strong>Môi trường Node.js</strong></td>
+            <td>Node.js 18.x kèm npm 9.x</td>
+            <td>Node.js 20.x LTS</td>
+        </tr>
+        <tr>
+            <td><strong>Bộ nhớ RAM</strong></td>
+            <td>Tối thiểu 4 GB RAM</td>
+            <td>8 GB RAM trở lên</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>1.3 Cơ Chế Khởi Chạy Tự Động 1-Click (Zero-Config)</h2>
+<p>
+    Hệ thống đã được đóng gói cơ chế <strong>tự động phục hồi và cài đặt</strong> thông qua tệp điều phối trung tâm <code>start.py</code> và tệp kích hoạt nhanh <code>start_all.bat</code>:
+</p>
+
+<div class="step-box">
+    <div class="step-number">1</div>
+    <div class="step-content">
+        <strong>Giải nén thư mục dự án:</strong> Người dùng sau khi tải về từ GitHub chỉ cần giải nén thư mục <code>Edupulse</code> vào ổ đĩa bất kỳ.
+    </div>
+</div>
+
+<div class="step-box">
+    <div class="step-number">2</div>
+    <div class="step-content">
+        <strong>Khởi chạy hệ thống:</strong>
+        <ul>
+            <li><strong>Cách 1 (Khuyến nghị trên Windows):</strong> Nhấp đúp chuột vào tệp <code>start_all.bat</code>.</li>
+            <li><strong>Cách 2 (Mở bằng Terminal / CMD):</strong> Chạy lệnh:
+                <pre><code>python start.py</code></pre>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="callout callout-success">
+    <div class="callout-title">✨ Tự động hóa hoàn toàn từ A đến Z</div>
+    Tệp <code>start.py</code> sẽ tự động:
+    <ol style="margin-bottom: 0;">
+        <li>Kiểm tra các gói Python backend (<code>fastapi</code>, <code>uvicorn</code>, <code>pandas</code>, <code>sqlalchemy</code>...), nếu máy tính còn thiếu sẽ tự động chạy <code>pip install -r backend/requirements.txt</code>.</li>
+        <li>Kiểm tra thư mục <code>frontend/node_modules</code>, nếu chưa có sẽ tự động gọi <code>npm install</code>.</li>
+        <li>Tự động kiểm tra file CSDL kho dữ liệu <code>database/edupulse_dw.db</code>, nếu thiếu sẽ tự kích hoạt sinh dữ liệu và nạp ETL tức thì.</li>
+        <li>Giải phóng cổng 8000 và 5173 nếu đang bị ứng dụng khác chiếm giữ.</li>
+        <li>Khởi động song song Backend và Frontend, sau đó tự bật trình duyệt truy cập hệ thống.</li>
+    </ol>
+</div>
+
+<h2>1.4 Bảng Tổng Hợp URL & Cổng Truy Cập</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Dịch vụ</th>
+            <th>Giao thức / URL</th>
+            <th>Chức năng chính</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Giao Diện Web UI</strong></td>
+            <td><code>http://localhost:5173</code></td>
+            <td>Bảng điều khiển học vụ, biểu đồ trực quan, tra cứu và kiểm toán</td>
+        </tr>
+        <tr>
+            <td><strong>Tài Liệu Backend API</strong></td>
+            <td><code>http://127.0.0.1:8000/docs</code></td>
+            <td>Swagger UI tương tác 11 RESTful endpoints chuẩn OpenAPI 3.0</td>
+        </tr>
+        <tr>
+            <td><strong>Cloudflare Public Tunnel</strong></td>
+            <td><code>https://*.trycloudflare.com</code></td>
+            <td>Đường dẫn công khai trực tuyến chia sẻ cho giảng viên chấm thi từ xa</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- CHƯƠNG 2 -->
+<div class="page-break"></div>
+<h1>Chương 2: Kiến Trúc Hoạt Động & Mô Hình Kho Dữ Liệu</h1>
+
+<h2>2.1 Kiến Trúc Tổng Thể 5 Tầng (5-Tier Architecture)</h2>
+<p>
+    EduPulse tuân thủ nghiêm ngặt mô hình kiến trúc kho dữ liệu doanh nghiệp phân tách rành mạch giữa tác nghiệp (OLTP) và phân tích (OLAP):
+</p>
+
+<div class="img-container">
+    <img src="images/06_architecture.png" alt="Kiến trúc tổng thể 5 tầng của EduPulse">
+    <div class="img-caption">Hình 2.1: Sơ đồ kiến trúc 5 tầng từ nguồn tác nghiệp OLTP đến giao diện trực quan hóa EduPulse</div>
+</div>
+
+<ol>
+    <li><strong>Tầng 1 — Nguồn tác nghiệp (Operational Source - OLTP):</strong> Cơ sở dữ liệu quan hệ mô phỏng hệ thống quản lý đào tạo trường đại học với cấu trúc 3NF chuẩn (gồm 8 bảng: <code>departments</code>, <code>majors</code>, <code>students</code>, <code>courses</code>, <code>semesters</code>, <code>class_sections</code>, <code>enrollments</code>, <code>attendance_logs</code>).</li>
+    <li><strong>Tầng 2 — Vùng đệm & Kiểm soát chất lượng (Staging & Data Quality Gate):</strong> Module ETL bằng Python/Pandas thực hiện trích xuất dữ liệu thô, chuẩn hóa ký tự, đối soát toàn vẹn khóa ngoại và phát hiện các giá trị dị biệt theo 7 tiêu chí.</li>
+    <li><strong>Tầng 3 — Kho Dữ Liệu Trung Tâm (Kimball Star Schema Data Warehouse):</strong> Cơ sở dữ liệu phân tích chuẩn hóa dạng hình sao, tách biệt bảng Fact số liệu và các bảng Dimension định danh.</li>
+    <li><strong>Tầng 4 — Tầng Dịch vụ API (FastAPI Backend):</strong> Cung cấp các endpoints tổng hợp dữ liệu tốc độ cao, hỗ trợ lọc đa chiều và trả về JSON chuẩn Pydantic v2.</li>
+    <li><strong>Tầng 5 — Ứng dụng & Trực quan hóa (Presentation Layer):</strong> Ứng dụng Single Page Application xây dựng bằng React 18, TypeScript, Tailwind CSS và Recharts.</li>
+</ol>
+
+<h2>2.2 Mô Hình Chiều Star Schema & Độ Chi Tiết Hạt (Grain)</h2>
+
+<div class="img-container">
+    <img src="images/07_logical_schema.png" alt="Sơ đồ logic Star Schema của EduPulse">
+    <div class="img-caption">Hình 2.2: Sơ đồ logic hình sao (Kimball Star Schema) với Fact trung tâm và 6 bảng Chiều</div>
+</div>
+
+<h3>Định nghĩa Hạt dữ liệu (Fact Grain):</h3>
+<div class="callout">
+    <div class="callout-title">🎯 GRAIN CỦA FACT TABLE: 1 Sinh Viên × 1 Môn Học × 1 Học Kỳ</div>
+    Mỗi bản ghi trong bảng <code>fact_student_performance</code> đại diện chính xác cho <strong>kết quả của một lượt sinh viên đăng ký tham gia một học phần trong một học kỳ cụ thể</strong>. Được ràng buộc bảo vệ toàn vẹn bằng chỉ mục duy nhất (Unique Composite Index):
+    <pre><code>CREATE UNIQUE INDEX idx_fsp_grain ON fact_student_performance(student_key, course_key, semester_key);</code></pre>
+</div>
+
+<h3>Phân loại các Chỉ số đo lường (Measures Classification):</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Tên Measure</th>
+            <th>Kiểu dữ liệu</th>
+            <th>Phân loại theo Kimball</th>
+            <th>Quy tắc tính toán tổng hợp</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>credits_attempted</code></td>
+            <td>INTEGER</td>
+            <td><span class="metric-badge metric-additive">Additive</span></td>
+            <td>Cộng dồn tự do trên mọi chiều: <code>SUM(credits_attempted)</code></td>
+        </tr>
+        <tr>
+            <td><code>credits_earned</code></td>
+            <td>INTEGER</td>
+            <td><span class="metric-badge metric-additive">Additive</span></td>
+            <td>Số tín chỉ đạt (bằng credits_attempted nếu is_passed=1, ngược lại 0)</td>
+        </tr>
+        <tr>
+            <td><code>total_score</code></td>
+            <td>REAL</td>
+            <td><span class="metric-badge metric-semi">Semi-Additive</span></td>
+            <td>Điểm thang 10. Không cộng dồn; chỉ tính trung bình theo trọng số</td>
+        </tr>
+        <tr>
+            <td><code>gpa_point_4</code></td>
+            <td>REAL</td>
+            <td><span class="metric-badge metric-semi">Semi-Additive</span></td>
+            <td>Điểm thang 4 (A=4, B=3, C=2, D=1, F=0). Tính GPA trọng số tín chỉ</td>
+        </tr>
+        <tr>
+            <td><code>attendance_rate</code></td>
+            <td>REAL</td>
+            <td><span class="metric-badge metric-semi">Semi-Additive</span></td>
+            <td>Tỷ lệ chuyên cần (0-100%). Tính trung bình theo sinh viên/môn</td>
+        </tr>
+        <tr>
+            <td><code>is_passed</code></td>
+            <td>INTEGER</td>
+            <td><span class="metric-badge metric-non">Non-Additive</span></td>
+            <td>Cờ nhị phân (1=Đạt nếu total_score ≥ 4.0; 0=Trượt). Không thể SUM làm tỷ lệ</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>2.3 Quản Trị Lịch Sử Chiều Chậm Thay Đổi (SCD Type 2)</h2>
+<p>
+    Trong môi trường giáo dục đại học, sinh viên thường xuyên có các biến động: chuyển ngành đào tạo (từ Kỹ thuật Phần mềm sang Khoa học Dữ liệu), bảo lưu, thôi học hoặc tốt nghiệp. Nếu áp dụng SCD Type 1 (ghi đè), kết quả các môn sinh viên học tại ngành cũ trong các năm trước sẽ bị quy kết nhầm lẫn sang ngành mới, làm sai lệch báo cáo lịch sử.
+</p>
+<p>
+    EduPulse áp dụng <strong>SCD Type 2</strong> trên bảng <code>dim_student</code>:
+</p>
+<pre><code>CREATE TABLE dim_student (
+    student_key INTEGER PRIMARY KEY AUTOINCREMENT, -- Surrogate Key
+    student_id VARCHAR(20) NOT NULL,              -- Natural Key (Mã SV)
+    full_name VARCHAR(100) NOT NULL,
+    major_key INTEGER NOT NULL,
+    major_name VARCHAR(100) NOT NULL,
+    department_name VARCHAR(100) NOT NULL,
+    status VARCHAR(30) NOT NULL,
+    valid_from TIMESTAMP NOT NULL,                -- Mốc bắt đầu hiệu lực
+    valid_to TIMESTAMP NULL,                      -- Mốc kết thúc (NULL = hiện tại)
+    is_current INTEGER NOT NULL DEFAULT 1         -- Cờ bản ghi hiệu lực hiện tại
+);</code></pre>
+<p>
+    Khi sinh viên chuyển ngành, hệ thống đóng bản ghi cũ (cập nhật <code>valid_to = CURRENT_TIMESTAMP</code>, <code>is_current = 0</code>) và tạo một bản ghi mới với <code>student_key</code> mới, <code>major_key</code> mới và <code>is_current = 1</code>. Kết quả học tập ở các học kỳ trước vẫn liên kết bền vững với <code>student_key</code> của ngành cũ.
+</p>
+
+<!-- CHƯƠNG 3 -->
+<div class="page-break"></div>
+<h1>Chương 3: Quy Trình ETL & Kiểm Soát Chất Lượng Dữ Liệu</h1>
+
+<h2>3.1 Chu Trình ETL 4 Bước Khép Kín</h2>
+<p>
+    Pipeline ETL của EduPulse được hiện thực hóa trong thư mục <code>etl/</code> với nguyên tắc thiết kế bất biến (Idempotent Pipeline), có thể chạy lại bất cứ lúc nào mà không gây trùng lặp dữ liệu:
+</p>
+
+<div class="img-container">
+    <img src="images/08_etl_pipeline.png" alt="Giao diện giám sát Pipeline ETL">
+    <div class="img-caption">Hình 3.1: Giao diện quản trị Pipeline ETL, xác thực tính lặp và kiểm toán bản ghi bị từ chối</div>
+</div>
+
+<div class="step-box">
+    <div class="step-number">1</div>
+    <div class="step-content">
+        <strong>Extract (Trích xuất):</strong> Mô-đun <code>etl/extract.py</code> tự động nhận diện nguồn dữ liệu (ưu tiên đọc trực tiếp từ CSDL tác nghiệp <code>edupulse_oltp.db</code>; nếu không có sẽ tự động dự phòng đọc qua các tệp CSV thô trong <code>data_generator/raw_data/</code>).
+    </div>
+</div>
+
+<div class="step-box">
+    <div class="step-number">2</div>
+    <div class="step-content">
+        <strong>Transform (Chuyển đổi & Làm sạch):</strong> Mô-đun <code>etl/transform.py</code> loại bỏ khoảng trắng, chuẩn hóa định dạng chữ hoa mã ngành/môn, kiểm tra ràng buộc nghiệp vụ và tính toán các chỉ số phái sinh (<code>is_passed</code>, <code>credits_earned</code>).
+    </div>
+</div>
+
+<div class="step-box">
+    <div class="step-number">3</div>
+    <div class="step-content">
+        <strong>Load (Nạp dữ liệu hình sao):</strong> Mô-đun <code>etl/load.py</code> nạp các bảng Dimension trước để thu thập bản đồ Surrogate Key (<code>student_key</code>, <code>course_key</code>, <code>semester_key</code>,...), sau đó map vào các dòng dữ liệu để nạp bảng Fact theo cơ chế Upsert chống trùng lặp.
+    </div>
+</div>
+
+<div class="step-box">
+    <div class="step-number">4</div>
+    <div class="step-content">
+        <strong>Audit (Kiểm toán chất lượng):</strong> Lưu vết toàn diện lịch sử nạp vào bảng <code>etl_audit_log</code> và chi tiết từng dòng dữ liệu bị loại vào <code>etl_rejected_records</code>.
+    </div>
+</div>
+
+<h2>3.2 7 Chốt Kiểm Soát Dữ Liệu Bẩn (Rejection Criteria)</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Mã lỗi (Reason Code)</th>
+            <th>Điều kiện kích hoạt kiểm tra</th>
+            <th>Hành động xử lý của Pipeline</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>NULL_MANDATORY_FIELD</code></td>
+            <td>Dòng dữ liệu thiếu mã SV, mã môn hoặc mã học kỳ</td>
+            <td>Loại bỏ, ghi log nguyên nhân và trích xuất raw JSON</td>
+        </tr>
+        <tr>
+            <td><code>MISSING_FOREIGN_KEY</code></td>
+            <td>Mã SV, mã môn hoặc học kỳ không tồn tại trong danh mục</td>
+            <td>Từ chối nạp Fact để đảm bảo toàn vẹn tham chiếu chiều</td>
+        </tr>
+        <tr>
+            <td><code>DUPLICATE_GRAIN</code></td>
+            <td>Trùng cặp hạt (Sinh viên, Môn học, Học kỳ) trong cùng file</td>
+            <td>Chỉ nạp bản ghi hợp lệ đầu tiên, từ chối bản ghi trùng</td>
+        </tr>
+        <tr>
+            <td><code>INVALID_SCORE_RANGE</code></td>
+            <td>Điểm tổng kết nhỏ hơn 0.0 hoặc lớn hơn 10.0</td>
+            <td>Cách ly dữ liệu sai lệch thang điểm học vụ</td>
+        </tr>
+        <tr>
+            <td><code>INVALID_ATTENDANCE_RATE</code></td>
+            <td>Tỷ lệ chuyên cần &lt; 0.0% hoặc &gt; 100.0%</td>
+            <td>Cách ly dữ liệu vượt quá biên tỷ lệ phần trăm</td>
+        </tr>
+        <tr>
+            <td><code>INVALID_DATE_FORMAT</code></td>
+            <td>Ngày đăng ký hoặc ngày học kỳ không chuẩn YYYY-MM-DD</td>
+            <td>Loại trừ hoặc chuyển đổi cưỡng bức sang mốc chuẩn</td>
+        </tr>
+        <tr>
+            <td><code>ORPHAN_DIMENSION_KEY</code></td>
+            <td>Không ánh xạ được sang Surrogate Key trong bảng chiều</td>
+            <td>Báo lỗi mapping và ghi nhận vào bảng kiểm toán</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- CHƯƠNG 4 -->
+<div class="page-break"></div>
+<h1>Chương 4: Hướng Dẫn Sử Dụng Chi Tiết Từng Phân Hệ Giao Diện</h1>
+
+<h2>4.1 Bảng Điều Khiển Tổng Quan (Overview Dashboard)</h2>
+<p>
+    Đây là màn hình chính của hệ thống khi truy cập vào <code>http://localhost:5173</code>, cung cấp cái nhìn 360 độ về sức khỏe đào tạo của toàn trường:
+</p>
+
+<div class="img-container">
+    <img src="images/01_overview.png" alt="Giao diện Overview Dashboard EduPulse">
+    <div class="img-caption">Hình 4.1: Bảng điều khiển tổng quan các chỉ số KPI và biểu đồ phân tích đa chiều</div>
+</div>
+
+<h3>Các thành phần chính trên giao diện:</h3>
+<ul>
+    <li>
+        <strong>Thanh Bộ Lọc Đa Chiều (Multi-Dimensional Filter Bar):</strong>
+        Nằm ở đỉnh trang, cho phép người dùng khoanh vùng dữ liệu tức thì theo <em>Học kỳ</em>, <em>Khoa đào tạo</em>, <em>Chuyên ngành</em>, <em>Môn học</em> và <em>Khóa sinh viên</em>. Mọi chỉ số và biểu đồ bên dưới sẽ tự động tính toán lại ngay khi thay đổi bộ lọc.
+    </li>
+    <li>
+        <strong>4 Thẻ KPI Cốt Lõi (Core Metric Cards):</strong>
+        <ol>
+            <li><em>Tổng sinh viên phân tích:</em> Số lượng sinh viên duy nhất (<code>COUNT(DISTINCT student_key)</code>).</li>
+            <li><em>GPA Trung Bình Toàn Khóa:</em> Tính theo thang 4.0 có trọng số tín chỉ chính xác.</li>
+            <li><em>Tỷ lệ đạt học phần:</em> Tỷ lệ phần trăm tổng lượt học đạt điểm qua môn.</li>
+            <li><em>Sinh viên có nguy cơ:</em> Số lượng sinh viên rơi vào diện cảnh báo học tập cần can thiệp.</li>
+        </ol>
+    </li>
+    <li>
+        <strong>Biểu đồ Phân Bổ Điểm Chữ (Grade Distribution Bar Chart):</strong>
+        Thể hiện tỷ lệ và số lượng sinh viên đạt các mức xếp loại A+, A, B+, B, C+, C, D+, D và F.
+    </li>
+    <li>
+        <strong>Biểu đồ Xu Hướng Điểm & Chuyên Cần Theo Thời Gian (Trend Line Chart):</strong>
+        Theo dõi sự biến thiên của GPA và tỷ lệ tham gia lớp học qua các học kỳ liên tiếp.
+    </li>
+</ul>
+
+<h2>4.2 Phân Tích Kết Quả Học Tập & Điểm Thi (Performance Analysis)</h2>
+<p>
+    Truy cập qua menu <strong>"Kết quả học tập"</strong> trên thanh điều hướng bên trái. Phân hệ này tập trung so sánh chất lượng đào tạo giữa các khoa và các chuyên ngành:
+</p>
+
+<div class="img-container">
+    <img src="images/02_performance.png" alt="Giao diện phân tích kết quả học tập">
+    <div class="img-caption">Hình 4.2: Biểu đồ so sánh thành tích đào tạo giữa các khoa và phổ điểm thang 10</div>
+</div>
+
+<ul>
+    <li><strong>So sánh GPA giữa các Khoa:</strong> Nhận diện khoa nào đang có kết quả đào tạo dẫn đầu và khoa nào cần nâng cao chất lượng giảng dạy.</li>
+    <li><strong>Phổ điểm chi tiết (Score Distribution):</strong> Đánh giá mức độ đồng đều của sinh viên thông qua các khoảng điểm &lt;4.0, 4.0-5.4, 5.5-6.9, 7.0-8.4, 8.5-10.0.</li>
+    <li><strong>Bảng kết quả học phần chi tiết:</strong> Cho phép tìm kiếm sinh viên theo tên hoặc mã số sinh viên, xem điểm quá trình, điểm thi kết thúc học phần và điểm chữ.</li>
+</ul>
+
+<!-- TIẾP CHƯƠNG 4 -->
+<div class="page-break"></div>
+<h2>4.3 Hệ Thống Cảnh Báo Sớm Học Tập & Can Thiệp (Early Warning System)</h2>
+<p>
+    Truy cập qua menu <strong>"Cảnh báo học tập"</strong>. Đây là một trong những tính năng nổi bật nhất của EduPulse, hỗ trợ đắc lực cho Ban Chủ Nhiệm Khoa và Cố Vấn Học Tập (CVHT) phát hiện kịp thời các sinh viên có nguy cơ bị buộc thôi học hoặc chậm tiến độ:
+</p>
+
+<div class="img-container">
+    <img src="images/03_early_warning.png" alt="Hệ thống cảnh báo sớm học tập EduPulse">
+    <div class="img-caption">Hình 4.3: Danh sách sinh viên thuộc diện cảnh báo học tập kèm lý do kích hoạt cảnh báo</div>
+</div>
+
+<h3>Quy tắc nhận diện nguy cơ minh bạch:</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Mức độ cảnh báo</th>
+            <th>Quy tắc kích hoạt (Trigger Rule)</th>
+            <th>Khuyến nghị can thiệp cho CVHT</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong style="color: #DC2626;">Mức 3 — Nghiêm trọng</strong></td>
+            <td>GPA &lt; 1.5 HOẶC Chuyên cần &lt; 50% HOẶC Thi lại ≥ 3 môn</td>
+            <td>Mời phụ huynh, đình chỉ học phần, lập lộ trình kèm cặp 1:1</td>
+        </tr>
+        <tr>
+            <td><strong style="color: #D97706;">Mức 2 — Cần lưu ý</strong></td>
+            <td>1.5 ≤ GPA &lt; 2.0 HOẶC Chuyên cần 50% - 75%</td>
+            <td>Gặp mặt trực tiếp, tư vấn giảm bớt tín chỉ đăng ký học kỳ tới</td>
+        </tr>
+        <tr>
+            <td><strong style="color: #CA8A04;">Mức 1 — Nguy cơ nhẹ</strong></td>
+            <td>2.0 ≤ GPA &lt; 2.3 HOẶC Có môn thi lại lần 1</td>
+            <td>Gửi email nhắc nhở, giới thiệu tham gia nhóm trợ giảng học thuật</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>4.4 Hiệu Quả Giảng Dạy & Phân Tích Môn Học (Courses Page)</h2>
+<p>
+    Truy cập qua menu <strong>"Môn học & Giảng dạy"</strong>. Cung cấp số liệu đào tạo chi tiết ở cấp độ từng học phần và từng lớp học phần (Class Sections):
+</p>
+
+<div class="img-container">
+    <img src="images/04_courses.png" alt="Phân tích môn học và hiệu quả giảng dạy">
+    <div class="img-caption">Hình 4.4: Bảng theo dõi tỷ lệ đạt/trượt và điểm trung bình theo từng môn học và giảng viên</div>
+</div>
+
+<ul>
+    <li><strong>Top môn học có tỷ lệ rớt cao nhất:</strong> Giúp phòng Đào tạo nhận diện các "nút thắt cổ chai" trong chương trình khung để điều chỉnh đề cương hoặc tăng tiết bài tập.</li>
+    <li><strong>Phân tích theo Lớp học phần:</strong> Đánh giá kết quả của cùng một môn học khi được giảng dạy bởi các giảng viên khác nhau để chuẩn hóa chất lượng kiểm tra đánh giá.</li>
+</ul>
+
+<!-- TIẾP CHƯƠNG 4 -->
+<div class="page-break"></div>
+<h2>4.5 Phân Tích & Kiểm Tra Tệp Dữ Liệu Độc Lập (File Analysis)</h2>
+<p>
+    Truy cập qua menu <strong>"Phân tích tệp dữ liệu"</strong>. Cho phép giảng viên hoặc quản trị viên tải lên các tệp dữ liệu thô dạng <code>.csv</code>, <code>.xlsx</code> (Excel) hoặc <code>.json</code> để kiểm tra chất lượng trước khi nạp vào hệ thống chính thức:
+</p>
+
+<div class="img-container">
+    <img src="images/05_file_analysis.png" alt="Phân hệ phân tích tệp dữ liệu độc lập">
+    <div class="img-caption">Hình 4.5: Giao diện kéo thả tệp tải lên và bảng phân tích phân vị, dữ liệu dị biệt tự động</div>
+</div>
+
+<h3>Các tính năng chính trong phân hệ:</h3>
+<ul>
+    <li><strong>Kéo thả tệp linh hoạt:</strong> Tự động nhận diện cấu trúc cột của bảng điểm thi kết thúc học phần hoặc bảng điểm danh.</li>
+    <li><strong>Kiểm toán chất lượng tức thì (Instant Quality Check):</strong> Đếm số dòng hợp lệ, số dòng thiếu dữ liệu, số giá trị nằm ngoài khoảng cho phép và cảnh báo trùng lặp.</li>
+    <li><strong>Thống kê phân vị tự động:</strong> Tính toán ngay lập tức Min, Max, Trung bình (Mean), Trung vị (Median), Độ lệch chuẩn (StdDev) và biểu đồ phân bổ cột điểm.</li>
+</ul>
+
+<h2>4.6 Tra Cứu Từ Điển Dữ Liệu Học Vụ (Data Dictionary)</h2>
+<p>
+    Truy cập qua menu <strong>"Từ điển dữ liệu"</strong>. Đóng vai trò là bản Hiến pháp dữ liệu duy nhất (Single Source of Truth) phục vụ quản trị dữ liệu:
+</p>
+
+<div class="img-container">
+    <img src="images/09_data_dictionary.png" alt="Từ điển dữ liệu học vụ EduPulse">
+    <div class="img-caption">Hình 4.6: Bảng tra cứu từ điển dữ liệu, định dạng trường, quy tắc kiểm tra và mô tả nghiệp vụ</div>
+</div>
+
+<p>
+    Tại đây, người dùng có thể tra cứu chi tiết mọi thuộc tính của từng bảng trong Kho Dữ Liệu: tên trường, kiểu dữ liệu SQL, khả năng chấp nhận Null, khóa chính/ngoại, quy tắc kiểm định hợp lệ và giá trị ví dụ trong thực tế.
+</p>
+
+<!-- CHƯƠNG 5 -->
+<div class="page-break"></div>
+<h1>Chương 5: Câu Hỏi Thường Gặp & Xử Lý Sự Cố (Troubleshooting)</h1>
+
+<h2>5.1 Các Tình Huống Xử Lý Sự Cố Nhanh</h2>
+
+<div class="step-box">
+    <div class="step-number">?</div>
+    <div class="step-content">
+        <strong>Tình huống 1: Bị báo lỗi cổng 8000 hoặc 5173 đang bị chiếm dụng.</strong><br>
+        <em>Giải pháp:</em> Tệp <code>start.py</code> đã có sẵn chức năng <code>free_port_if_stuck(port)</code> tự động tìm và tắt tiến trình kẹt. Nếu vẫn bị lỗi, mở Command Prompt quyền Admin và gõ:
+        <pre><code>taskkill /F /IM python.exe
+taskkill /F /IM node.exe</code></pre>
+    </div>
+</div>
+
+<div class="step-box">
+    <div class="step-number">?</div>
+    <div class="step-content">
+        <strong>Tình huống 2: Người nhận tải về máy tính báo "python is not recognized".</strong><br>
+        <em>Giải pháp:</em> Máy tính người nhận chưa cài Python hoặc khi cài đặt quên tích vào ô <strong>"Add Python to PATH"</strong>. Người dùng chỉ cần vào <a href="https://www.python.org">python.org</a> tải bản cài đặt mới nhất và tích chọn tùy chọn này.
+    </div>
+</div>
+
+<div class="step-box">
+    <div class="step-number">?</div>
+    <div class="step-content">
+        <strong>Tình huống 3: Muốn thiết lập lại (Reset) toàn bộ dữ liệu Kho Dữ Liệu về trạng thái ban đầu.</strong><br>
+        <em>Giải pháp:</em> Rất đơn giản, chỉ cần vào thư mục <code>database/</code> và xóa file <code>edupulse_dw.db</code>. Khi chạy lại <code>python start.py</code>, hệ thống sẽ tự động phát hiện file thiếu và chạy lại pipeline phát sinh dữ liệu + nạp ETL mới 100%.
+    </div>
+</div>
+
+<div class="step-box">
+    <div class="step-number">?</div>
+    <div class="step-content">
+        <strong>Tình huống 4: Làm thế nào để kiểm tra tính toàn vẹn kỹ thuật (Automated Testing)?</strong><br>
+        <em>Giải pháp:</em> Mở terminal tại thư mục dự án và thực thi bộ kiểm thử tự động gồm 13 bài test bằng lệnh:
+        <pre><code>pytest backend/tests -v</code></pre>
+        Tất cả 13 bài kiểm thử (kiểm tra tính đúng đắn toán học của KPI, tính lặp an toàn Idempotency của ETL, tính đồng bộ của Data Dictionary) sẽ trả về <strong>100% PASSED</strong>.
+    </div>
+</div>
+
+<div class="callout callout-success">
+    <div class="callout-title">🎉 Kết Luận Đồ Án</div>
+    Hệ thống <strong>EduPulse</strong> là giải pháp hoàn chỉnh, đạt chuẩn học thuật và kỹ thuật cao cho môn Kho Dữ Liệu. Dự án sẵn sàng cho các buổi bảo vệ đồ án giữa kỳ và cuối kỳ với tính trực quan sinh động, độ tin cậy dữ liệu cao và khả năng thuyết trình thực tế xuất sắc.
+</div>
+
+</body>
+</html>

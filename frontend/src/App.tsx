@@ -19,7 +19,35 @@ import { FilterOptions, FilterState, OverviewData } from './types';
 import { ChevronRight, RefreshCw, AlertCircle } from 'lucide-react';
 
 export function App() {
-  const [activeTab, setActiveTab] = useState<string>('overview');
+  const getInitialTab = () => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get('tab') || window.location.hash.replace('#/', '').replace('#', '');
+      if (tab) return tab;
+    } catch (e) {}
+    return 'overview';
+  };
+  const [activeTab, setActiveTabState] = useState<string>(getInitialTab);
+
+  const setActiveTab = (tab: string) => {
+    setActiveTabState(tab);
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set('tab', tab);
+      window.history.replaceState({}, '', url.toString());
+    } catch (e) {}
+  };
+
+  useEffect(() => {
+    const handleUrlChange = () => {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get('tab') || window.location.hash.replace('#/', '').replace('#', '');
+      if (tab) setActiveTabState(tab);
+    };
+    window.addEventListener('popstate', handleUrlChange);
+    return () => window.removeEventListener('popstate', handleUrlChange);
+  }, []);
+
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
 
