@@ -1,0 +1,23 @@
+﻿course_code,course_name,credits,department_id,course_level,is_core
+CS101,Nhập môn Lập trình Python,3,CNTT,FOUNDATION,1
+CS102,Cấu trúc Dữ liệu và Giải thuật,4,CNTT,CORE,1
+CS201,Cơ sở Dữ liệu & Hệ quản trị CSDL,3,CNTT,CORE,1
+CS202,Lập trình Web Hiện đại,3,CNTT,ELECTIVE,0
+CS301,Kiến trúc Kho dữ liệu & BI,3,CNTT,CORE,1
+CS302,Hệ điều hành & Mạng máy tính,4,CNTT,CORE,1
+CS303,Trí tuệ Nhân tạo Cơ sở,3,CNTT,CORE,1
+CS401,Đồ án Tốt nghiệp CNTT,4,CNTT,CORE,1
+ET101,Mạch điện & Điện tử Tương tự,3,DTVT,FOUNDATION,1
+ET201,Xử lý Tín hiệu Số,4,DTVT,CORE,1
+ET202,Vi điều khiển & Lập trình Nhúng,3,DTVT,CORE,1
+ET301,Giao thức Truyền thông IoT,3,DTVT,ELECTIVE,0
+BA101,Kinh tế Vi mô & Vĩ mô,3,KTTC,FOUNDATION,1
+BA102,Nguyên lý Kế toán,3,KTTC,FOUNDATION,1
+BA201,Quản trị Tài chính Doanh nghiệp,3,KTTC,CORE,1
+BA202,Phân tích Dữ liệu Kinh doanh,3,KTTC,CORE,1
+BA301,Marketing Căn bản & Kỹ thuật số,3,KTTC,ELECTIVE,0
+GE101,Giải tích 1 cho Kỹ thuật,4,CNTT,FOUNDATION,1
+GE102,Đại số Tuyến tính & Xác suất,3,CNTT,FOUNDATION,1
+EN101,Tiếng Anh Học thuật 1,3,NN,FOUNDATION,1
+EN102,Tiếng Anh Giao tiếp & Thuyết trình,3,NN,ELECTIVE,0
+EN201,Tiếng Anh Chuyên ngành Kỹ thuật,3,NN,CORE,1

@@ -1,0 +1,4 @@
+PUBLIC_URL=https://neil-millennium-remained-coupon.trycloudflare.com
+LOCAL_FRONTEND=http://localhost:5173
+LOCAL_BACKEND=http://127.0.0.1:8000/docs
+UPDATED_AT=2026-10-27 20:40:00
