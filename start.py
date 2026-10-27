@@ -104,12 +104,12 @@ def copy_to_clipboard(text: str) -> bool:
         return False
 
 def find_valid_python() -> str:
-    """Tự động tìm kiếm interpreter Python có cài đầy đủ thư viện cần thiết."""
+    """Tự động tìm kiếm interpreter Python khả dụng trên mọi máy."""
     test_code = "import fastapi, uvicorn, sqlalchemy, pydantic, pandas, numpy; print('READY')"
     candidates = [
-        r"C:\Users\Admin\AppData\Local\Programs\Python\Python311\python.exe",
         sys.executable,
         "python",
+        "py -3.11",
         "py",
         "python3",
     ]
@@ -117,22 +117,57 @@ def find_valid_python() -> str:
         if not cand:
             continue
         try:
-            cmd = [cand, "-c", test_code]
+            cmd = cand.split() + ["-c", test_code]
             res = subprocess.run(cmd, capture_output=True, text=True, timeout=3)
             if res.returncode == 0 and "READY" in res.stdout:
                 return cand
         except Exception:
             continue
-    return sys.executable
+    # Nếu chưa cài đủ thư viện, dùng sys.executable hoặc python mặc định
+    return sys.executable or "python"
+
+def ensure_python_dependencies(py_bin: str):
+    """Tự động kiểm tra và cài đặt thư viện Python nếu máy người dùng chưa cài."""
+    test_code = "import fastapi, uvicorn, sqlalchemy, pydantic, pandas, numpy"
+    cmd = py_bin.split() + ["-c", test_code]
+    try:
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=3)
+        if res.returncode != 0:
+            req_file = os.path.join(BASE_DIR, "backend", "requirements.txt")
+            print("\n[EduPulse] Phát hiện máy tính chưa cài đủ thư viện Python backend.", flush=True)
+            print(f"           Đang tự động chạy pip install từ {req_file}...", flush=True)
+            install_cmd = py_bin.split() + ["-m", "pip", "install", "-r", req_file]
+            subprocess.run(install_cmd, check=True)
+            print("[EduPulse] Đã cài đặt xong các thư viện Python backend! ✅\n", flush=True)
+    except Exception as e:
+        print(f"[Gợi ý] Nếu gặp lỗi thiếu thư viện backend, vui lòng chạy: pip install -r backend/requirements.txt ({e})", flush=True)
+
+def ensure_frontend_dependencies():
+    """Tự động kiểm tra và chạy npm install nếu người dùng giải nén chưa có node_modules."""
+    frontend_dir = os.path.join(BASE_DIR, "frontend")
+    node_modules_dir = os.path.join(frontend_dir, "node_modules")
+    if not os.path.exists(node_modules_dir):
+        print("\n[EduPulse] Phát hiện Frontend chưa có thư mục node_modules (lần đầu giải nén).", flush=True)
+        print("           Đang tự động chạy 'npm install'...", flush=True)
+        npm_cmd = "npm.cmd" if sys.platform == "win32" else "npm"
+        try:
+            subprocess.run([npm_cmd, "install"], cwd=frontend_dir, check=True)
+            print("[EduPulse] Đã cài đặt gói thư viện Frontend thành công! ✅\n", flush=True)
+        except Exception as e:
+            print(f"[CẢNH BÁO] Không thể tự động chạy npm install: {e}", flush=True)
+            print("Vui lòng mở cmd/terminal tại thư mục frontend và gõ: npm install\n", flush=True)
 
 def ensure_database():
     """Kiểm tra và tự động khởi tạo Data Warehouse nếu chưa có."""
     dw_path = os.path.join(BASE_DIR, "database", "edupulse_dw.db")
     if not os.path.exists(dw_path):
         py_bin = find_valid_python()
+        ensure_python_dependencies(py_bin)
         print("[1/4] Khởi tạo CSDL mẫu & chạy ETL nạp kho dữ liệu Star Schema...", flush=True)
-        subprocess.run([py_bin, "data_generator/generate_synthetic_data.py"], cwd=BASE_DIR, check=True)
-        subprocess.run([py_bin, "etl/run_pipeline.py"], cwd=BASE_DIR, check=True)
+        cmd_gen = py_bin.split() + ["data_generator/generate_synthetic_data.py"]
+        cmd_etl = py_bin.split() + ["etl/run_pipeline.py"]
+        subprocess.run(cmd_gen, cwd=BASE_DIR, check=True)
+        subprocess.run(cmd_etl, cwd=BASE_DIR, check=True)
         print("      Dữ liệu mẫu và kho dữ liệu đã khởi tạo thành công! ✅", flush=True)
     else:
         print("[1/4] Kho Dữ Liệu EduPulse (Data Warehouse) đã sẵn sàng. ✅", flush=True)
@@ -147,14 +182,16 @@ def start_backend():
     time.sleep(0.5)
 
     py_bin = find_valid_python()
+    ensure_python_dependencies(py_bin)
     print(f"[2/4] Đang khởi động Backend FastAPI (Cổng 8000) bằng [{py_bin}]...", flush=True)
 
     log_path = os.path.join(BASE_DIR, "backend", "backend.log")
     log_file = open(log_path, "w", encoding="utf-8")
 
     creation_flags = getattr(subprocess, "CREATE_NO_WINDOW", 0x08000000) if sys.platform == "win32" else 0
+    backend_cmd = py_bin.split() + ["-m", "uvicorn", "backend.main:app", "--host", "127.0.0.1", "--port", "8000"]
     backend_proc = subprocess.Popen(
-        [py_bin, "-m", "uvicorn", "backend.main:app", "--host", "127.0.0.1", "--port", "8000"],
+        backend_cmd,
         cwd=BASE_DIR,
         stdout=log_file,
         stderr=subprocess.STDOUT,
@@ -192,6 +229,7 @@ def start_frontend():
         print("[3/4] Frontend React Vite (Cổng 5173) đã đang chạy sẵn. ✅", flush=True)
         return
 
+    ensure_frontend_dependencies()
     free_port_if_stuck(5173)
     time.sleep(0.5)
 
