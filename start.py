@@ -303,12 +303,30 @@ def main():
         "--no-tunnel", "--local", dest="no_tunnel", action="store_true",
         help="Chỉ chạy cục bộ (Backend + Frontend), không bật Cloudflare Tunnel"
     )
+    parser.add_argument(
+        "--online", "--tunnel", dest="online", action="store_true",
+        help="Chạy đầy đủ và bật Cloudflare Public Tunnel"
+    )
     args = parser.parse_args()
 
     os.chdir(BASE_DIR)
 
+    # Nếu chạy trực tiếp không tham số trong terminal tương tác, cho phép chọn chế độ
+    if not args.no_tunnel and not args.online and sys.stdin and sys.stdin.isatty() and len(sys.argv) == 1:
+        print("=" * 70, flush=True)
+        print("   EDUPULSE — BỘ KHỞI CHẠY HỆ THỐNG TOÀN DIỆN (ALL-IN-ONE)", flush=True)
+        print("=" * 70, flush=True)
+        print("  [1] Chạy Đầy Đủ + Kết Nối Online Cloudflare Tunnel (Mặc định)")
+        print("  [2] Chỉ Chạy Cục Bộ (Localhost: Frontend 5173 & Backend 8000)")
+        try:
+            choice = input("\n👉 Chọn chế độ [1/2] (Nhấn Enter để chọn 1): ").strip()
+            if choice == "2":
+                args.no_tunnel = True
+        except (EOFError, KeyboardInterrupt):
+            pass
+
     print("=" * 70, flush=True)
-    print("   EDUPULSE — KHỞI CHẠY HỆ THỐNG TOÀN DIỆN (ALL-IN-ONE)", flush=True)
+    print("   EDUPULSE — ĐANG KHỞI ĐỘNG HỆ THỐNG...", flush=True)
     print("=" * 70, flush=True)
 
     # 1. Cơ sở dữ liệu & ETL
